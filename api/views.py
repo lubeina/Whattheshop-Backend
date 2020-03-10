@@ -21,30 +21,3 @@ class CakeView(APIView):
             cakes = Cake.objects.all()
             serializer = CakeSerializer(cakes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def post(self, request):
-        serializer = CakeCreateSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def put(self, request, cake_id):
-        cake = Cake.objects.get(id=cake_id)
-        serializer = CakeCreateSerializer(cake, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, cake_id):
-        cake = Cake.objects.get(id=cake_id)
-        cake.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class CakesList(ListAPIView):
-    queryset = Cake.objects.all()
-    serializer_class = CakeSerializer
-    filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = ['name']
