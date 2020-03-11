@@ -5,7 +5,7 @@ from django.conf import settings
 from api import views
 
 urlpatterns = [
-    path('cakes/', views.CakeView.as_view(), name="cake-list"),
+    path('cakes/', views.CakeList.as_view(), name="cake-list"),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
 ]

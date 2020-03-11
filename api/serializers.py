@@ -23,9 +23,3 @@ class CakeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cake
         fields = ['name', 'image', 'price', 'flavor', 'size', 'shape', 'id']
-
-
-class CakeCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Cake
-        fields = ['name', 'image', 'price', 'flavor', 'size', 'shape']
