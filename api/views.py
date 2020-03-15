@@ -7,6 +7,14 @@ class UserCreateAPIView(CreateAPIView):
     serializer_class = UserCreateSerializer
 
 
+class ProfileDetails(RetrieveAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user.profile
+
+
 class CakeList(ListAPIView):
     queryset = Cake.objects.all()
     serializer_class = CakeSerializer

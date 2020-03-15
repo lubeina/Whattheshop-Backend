@@ -35,7 +35,7 @@ class Cart(models.Model):
         User, on_delete=models.CASCADE)
     cart_item = models.ForeignKey(
         Cart_Item, on_delete=models.CASCADE)
-    date = models.DateField()
+    date = models.DateField(auto_now_add=True)
     active = models.BooleanField()
 
     def __str__(self):
