@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Cake, Cart, Cart_Item
+from .models import Cake, Cart, Cart_Item, Profile
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -8,15 +8,38 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'password']
+        fields = ['username', 'first_name', 'last_name', 'email', 'password']
 
     def create(self, validated_data):
         username = validated_data['username']
         password = validated_data['password']
-        new_user = User(username=username)
+        first_name = validated_data['first_name']
+        last_name = validated_data['last_name']
+        email = validated_data['email']
+        new_user = User(username=username, first_name=first_name,
+                        last_name=last_name, email=email)
         new_user.set_password(password)
         new_user.save()
         return validated_data
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name"]
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    past_items = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Profile
+        fields = ['user', 'past_items']
+
+    def get_past_items(self, obj):
+        items = Cart.objects.filter(user=obj.user, date__lt=date.today())
+        return CartSerializer(Cart_Item, many=True).data
 
 
 class CakeSerializer(serializers.ModelSerializer):
@@ -34,13 +57,13 @@ class Cart_ItemSerializer(serializers.ModelSerializer):
 
 
 class CartSerializer(serializers.ModelSerializer):
-    user = UserCreateSerializer()
+    user = UserSerializer()
     cart_item = Cart_ItemSerializer()
     cart_total = serializers.SerializerMethodField()
 
     class Meta:
         model = Cart
-        fields = ['user', 'cart_item', 'cart_total', 'active']
+        fields = ['user', 'cart_item', 'cart_total', 'date', 'active']
 
     def get_cart_total(self, obj):
         return obj.cart_item.cake.price*obj.cart_item.quantity

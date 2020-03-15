@@ -14,6 +14,13 @@ class Cake(models.Model):
         return self.name
 
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.user)
+
+
 class Cart_Item(models.Model):
     cake = models.ForeignKey(
         Cake, on_delete=models.CASCADE)
@@ -28,6 +35,7 @@ class Cart(models.Model):
         User, on_delete=models.CASCADE)
     cart_item = models.ForeignKey(
         Cart_Item, on_delete=models.CASCADE)
+    date = models.DateField()
     active = models.BooleanField()
 
     def __str__(self):
