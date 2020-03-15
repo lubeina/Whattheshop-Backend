@@ -1,23 +1,26 @@
-from rest_framework.generics import CreateAPIView, ListAPIView
-from .serializers import UserCreateSerializer, CakeCreateSerializer, CakeSerializer
-from .models import Cake
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, CreateAPIView
+from .serializers import UserCreateSerializer, CakeSerializer, CartSerializer, Cart_ItemSerializer
+from .models import Cake, Cart_Item, Cart
 
 
 class UserCreateAPIView(CreateAPIView):
     serializer_class = UserCreateSerializer
 
 
-class CakeView(APIView):
+class CakeList(ListAPIView):
+    queryset = Cake.objects.all()
+    serializer_class = CakeSerializer
 
-    def get(self, request, cake_id=None):
-        if cake_id:
-            cake = Cake.objects.get(id=cake_id)
-            serializer = CakeSerializer(cake)
-        else:
-            cakes = Cake.objects.all()
-            serializer = CakeSerializer(cakes, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class CartDetail(RetrieveAPIView):
+    serializer_class = CartSerializer
+
+    def get_queryset(self):
+        return Cart.objects.filter(user=self.request.user, active=True)
+
+
+class CartItem(CreateAPIView):
+    serializer_class = Cart_ItemSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
