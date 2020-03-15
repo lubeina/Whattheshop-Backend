@@ -1,5 +1,5 @@
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, CreateAPIView
-from .serializers import UserCreateSerializer, CakeSerializer, CartSerializer, Cart_ItemSerializer
+from .serializers import UserCreateSerializer, CakeSerializer, CartSerializer, Cart_ItemSerializer, ProfileSerializer
 from .models import Cake, Cart_Item, Cart
 
 
