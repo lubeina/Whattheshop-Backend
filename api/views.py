@@ -22,8 +22,8 @@ class CakeList(ListAPIView):
 class CartDetail(RetrieveAPIView):
     serializer_class = CartSerializer
 
-    def get_queryset(self):
-        return Cart.objects.filter(user=self.request.user, active=True)
+    def get_object(self):
+        return Cart.objects.get(user=self.request.user, active=True)
 
 
 class CartItem(CreateAPIView):

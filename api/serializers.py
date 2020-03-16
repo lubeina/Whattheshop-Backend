@@ -47,23 +47,24 @@ class CakeSerializer(serializers.ModelSerializer):
         model = Cake
         fields = ['name', 'image', 'price', 'flavor', 'size', 'shape', 'id']
 
-
-class Cart_ItemSerializer(serializers.ModelSerializer):
-    cake = serializers.SlugRelatedField(slug_field='name', read_only=True)
-
-    class Meta:
-        model = Cart_Item
-        fields = ['cake', 'quantity']
-
-
 class CartSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    cart_item = Cart_ItemSerializer()
-    cart_total = serializers.SerializerMethodField()
 
     class Meta:
         model = Cart
-        fields = ['user', 'cart_item', 'cart_total', 'date', 'active']
+        fields = ['user', 'date', 'active']
 
-    def get_cart_total(self, obj):
-        return obj.cart_item.cake.price*obj.cart_item.quantity
+
+class Cart_ItemSerializer(serializers.ModelSerializer):
+    cake = serializers.SlugRelatedField(slug_field='name', read_only=True)
+    cart = CartSerializer()
+    item_price = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Cart_Item
+        fields = ['cake', 'quantity','item_price','cart']
+    
+    def get_item_price(self, obj):
+        return obj.cake.price*obj.quantity
+
+
