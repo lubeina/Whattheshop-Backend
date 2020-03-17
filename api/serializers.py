@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Cake, Cart, Cart_Item, Profile
+from .models import Cake, Cart, Cart_Item
+from datetime import date
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -26,20 +27,19 @@ class UserCreateSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["first_name", "last_name"]
+        fields = ['first_name', 'last_name']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
     past_items = serializers.SerializerMethodField()
 
     class Meta:
-        model = Profile
-        fields = ['user', 'past_items']
+        model = User
+        fields = ['username','first_name', 'last_name', 'email', 'past_items']
 
     def get_past_items(self, obj):
-        items = Cart.objects.filter(user=obj.user, date__lt=date.today())
-        return CartSerializer(Cart_Item, many=True).data
+        items = Cart.objects.filter(user=obj, date__lt=date.today())
+        return CartSerializer(items, many=True).data
 
 
 class CakeSerializer(serializers.ModelSerializer):
