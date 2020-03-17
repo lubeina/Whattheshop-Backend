@@ -13,26 +13,33 @@ class Cake(models.Model):
     def __str__(self):
         return self.name
 
-
-class Cart_Item(models.Model):
-    cake = models.ForeignKey(
-        Cake, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s: %s" % (self.cake.name, str(self.quantity))
-
+        return str(self.user)
 
 class Cart(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE)
-    cart_item = models.ForeignKey(
-        Cart_Item, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
     active = models.BooleanField()
 
     def __str__(self):
         return self.user.username
+
+class Cart_Item(models.Model):
+    cake = models.ForeignKey(
+        Cake, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    cart = models.ForeignKey(
+        Cart, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "%s: %s" % (self.cake.name, str(self.quantity))
+
+
+
 
 
 # class Profile(models.Model):
