@@ -1,6 +1,7 @@
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, CreateAPIView
-from .serializers import UserCreateSerializer, CakeSerializer, CartSerializer, Cart_ItemSerializer, ProfileSerializer
+from .serializers import UserCreateSerializer, CakeSerializer, CartSerializer, CartItemCreateSerializer, ProfileSerializer
 from .models import Cake, Cart_Item, Cart
+from django.contrib.auth.models import User
 
 
 class UserCreateAPIView(CreateAPIView):
@@ -11,7 +12,7 @@ class ProfileDetails(RetrieveAPIView):
     serializer_class = ProfileSerializer
 
     def get_object(self):
-        return self.request.user.profile
+        return self.request.user
 
 
 class CakeList(ListAPIView):
@@ -22,12 +23,14 @@ class CakeList(ListAPIView):
 class CartDetail(RetrieveAPIView):
     serializer_class = CartSerializer
 
-    def get_queryset(self):
-        return Cart.objects.filter(user=self.request.user, active=True)
+    def get_object(self):
+        cart,created = Cart.objects.get_or_create(user=self.request.user, active=True)
+        return cart
 
 
 class CartItem(CreateAPIView):
-    serializer_class = Cart_ItemSerializer
+    serializer_class = CartItemCreateSerializer
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        cart,created = Cart.objects.get_or_create(user=self.request.user, active=True)
+        serializer.save(cart = cart)
