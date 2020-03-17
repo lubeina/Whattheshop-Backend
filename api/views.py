@@ -1,5 +1,5 @@
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, CreateAPIView
-from .serializers import UserCreateSerializer, CakeSerializer, CartSerializer, Cart_ItemSerializer, ProfileSerializer
+from .serializers import UserCreateSerializer, CakeSerializer, CartSerializer, CartItemCreateSerializer, ProfileSerializer
 from .models import Cake, Cart_Item, Cart
 
 
@@ -23,11 +23,13 @@ class CartDetail(RetrieveAPIView):
     serializer_class = CartSerializer
 
     def get_object(self):
-        return Cart.objects.get(user=self.request.user, active=True)
+        cart,created = Cart.objects.get_or_create(user=self.request.user, active=True)
+        return cart
 
 
 class CartItem(CreateAPIView):
-    serializer_class = Cart_ItemSerializer
+    serializer_class = CartItemCreateSerializer
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        cart,created = Cart.objects.get_or_create(user=self.request.user, active=True)
+        serializer.save(cart = cart)
