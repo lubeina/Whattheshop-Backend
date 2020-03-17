@@ -72,10 +72,11 @@ class CartSerializer(serializers.ModelSerializer):
         cart_item = Cart_Item.objects.filter(cart=obj.id)
         return CartItemSerializer(cart_item, many=True).data
 
-
+      
 class CartItemCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart_Item
         fields = ['cake', 'quantity']
+
 
 
