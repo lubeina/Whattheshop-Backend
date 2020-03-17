@@ -27,19 +27,18 @@ class UserCreateSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email']
+        fields = ['first_name', 'last_name']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
     past_items = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ['user', 'past_items']
+        fields = ['username','first_name', 'last_name', 'email', 'past_items']
 
     def get_past_items(self, obj):
-        items = Cart.objects.filter(user=obj.user, date__lt=date.today())
+        items = Cart.objects.filter(user=obj, date__lt=date.today())
         return CartSerializer(items, many=True).data
 
 
