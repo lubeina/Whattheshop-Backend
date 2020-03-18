@@ -30,7 +30,13 @@ class CartDetail(RetrieveAPIView):
 
 class CartItem(CreateAPIView):
     serializer_class = CartItemCreateSerializer
+    def create(self, request, *args, **kwargs):
+        serializer = CartItemCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_data = self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(CartItemSerializer(new_data).data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
         cart,created = Cart.objects.get_or_create(user=self.request.user, active=True)
-        serializer.save(cart = cart)
+        return serializer.save(cart = cart)
