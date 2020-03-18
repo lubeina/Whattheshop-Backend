@@ -1,10 +1,7 @@
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, CreateAPIView
-from .serializers import UserCreateSerializer, CakeSerializer, CartSerializer, CartItemCreateSerializer, ProfileSerializer,CartItemSerializer
+from .serializers import UserCreateSerializer, CakeSerializer, CartSerializer, CartItemCreateSerializer, ProfileSerializer
 from .models import Cake, Cart_Item, Cart
 from django.contrib.auth.models import User
-from rest_framework.response import Response
-from rest_framework import status
-
 
 
 class UserCreateAPIView(CreateAPIView):
@@ -39,9 +36,7 @@ class CartItem(CreateAPIView):
         new_data = self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(CartItemSerializer(new_data).data, status=status.HTTP_201_CREATED, headers=headers)
-        
-        
+
     def perform_create(self, serializer):
         cart,created = Cart.objects.get_or_create(user=self.request.user, active=True)
         return serializer.save(cart = cart)
-
