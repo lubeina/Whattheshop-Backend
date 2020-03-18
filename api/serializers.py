@@ -50,7 +50,7 @@ class CakeSerializer(serializers.ModelSerializer):
 
 class CartItemSerializer(serializers.ModelSerializer):
     cake = serializers.SlugRelatedField(slug_field='name', read_only=True)
-    item_price = serializers.SerializerMethodField(read_only = True)
+    item_price = serializers.SerializerMethodField()
 
     class Meta:
         model = Cart_Item
@@ -77,7 +77,6 @@ class CartItemCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart_Item
         fields = ['cake', 'quantity']
-
 
 
 
