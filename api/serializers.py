@@ -54,7 +54,7 @@ class CartItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CartItem
-        fields = ['cake', 'quantity','item_price', 'date']
+        fields = ['cake', 'quantity','item_price','id','date']
     
     def get_item_price(self, obj):
         return obj.cake.price*obj.quantity
@@ -76,7 +76,12 @@ class CartSerializer(serializers.ModelSerializer):
 class CartItemCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
-        fields = ['cake', 'quantity', 'date']
+        fields = ['cake', 'quantity']
 
+
+class CartUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CartItem
+        fields = ['quantity']
 
 

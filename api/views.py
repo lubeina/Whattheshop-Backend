@@ -1,7 +1,11 @@
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, CreateAPIView
-from .serializers import UserCreateSerializer, CakeSerializer, CartSerializer, CartItemCreateSerializer, ProfileSerializer,CartItemSerializer
-from .models import Cake, CartItem, Cart
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, CreateAPIView,RetrieveUpdateAPIView
+from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
+
+from .serializers import UserCreateSerializer, CakeSerializer, CartSerializer, CartItemCreateSerializer, ProfileSerializer,CartItemSerializer,CartUpdateSerializer
+from .models import Cake, CartItem, Cart
+from .permissions import IsCartOwner
+
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -28,6 +32,12 @@ class CartDetail(RetrieveAPIView):
         cart,created = Cart.objects.get_or_create(user=self.request.user, active=True)
         return cart
 
+class UpdateCart(RetrieveUpdateAPIView):
+    serializer_class = CartUpdateSerializer
+    queryset = CartItem.objects.all()
+    lookup_field = 'id'
+    lookup_url_kwarg = 'cartitem_id'
+    permission_classes = [IsAuthenticated, IsCartOwner]
 
 class CartItem(CreateAPIView):
     serializer_class = CartItemCreateSerializer
@@ -41,3 +51,8 @@ class CartItem(CreateAPIView):
     def perform_create(self, serializer):
         cart,created = Cart.objects.get_or_create(user=self.request.user, active=True)
         return serializer.save(cart = cart)
+
+
+
+
+
