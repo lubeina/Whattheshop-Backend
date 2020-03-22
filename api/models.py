@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 
 
 class Cake(models.Model):
@@ -12,23 +13,24 @@ class Cake(models.Model):
 
     def __str__(self):
         return self.name
-
+      
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.user)
-
+      
 class Cart(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField(default=date.today)
     active = models.BooleanField()
 
     def __str__(self):
-        return self.user.username
+        return "%s: %s" % (str(self.date), self.user.username)
 
 class CartItem(models.Model):
+    date = models.DateField(default=date.today)
     cake = models.ForeignKey(
         Cake, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
@@ -36,7 +38,7 @@ class CartItem(models.Model):
         Cart, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s: %s" % (self.cake.name, str(self.quantity))
+        return "%s: %s, %s" % (str(self.date), self.cake.name, str(self.quantity))
 
 
 

@@ -38,7 +38,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ['username','first_name', 'last_name', 'email', 'past_items']
 
     def get_past_items(self, obj):
-        items = Cart.objects.filter(user=obj, date__lt=date.today())
+        items = Cart.objects.filter(user=obj, date__lte=date.today())
         return CartSerializer(items, many=True).data
 
 
@@ -54,7 +54,7 @@ class CartItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CartItem
-        fields = ['cake', 'quantity','item_price','id']
+        fields = ['cake', 'quantity','item_price','id','date']
     
     def get_item_price(self, obj):
         return obj.cake.price*obj.quantity
@@ -66,7 +66,7 @@ class CartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ['user', 'date','cart_item']
+        fields = ['user', 'id', 'date', 'cart_item']
     
     def get_cart_item(self, obj):
         cart_item = CartItem.objects.filter(cart=obj.id)
@@ -77,6 +77,7 @@ class CartItemCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
         fields = ['cake', 'quantity']
+
 
 class CartUpdateSerializer(serializers.ModelSerializer):
     class Meta:
