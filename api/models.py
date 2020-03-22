@@ -28,7 +28,7 @@ class Cart(models.Model):
     def __str__(self):
         return self.user.username
 
-class Cart_Item(models.Model):
+class CartItem(models.Model):
     cake = models.ForeignKey(
         Cake, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
