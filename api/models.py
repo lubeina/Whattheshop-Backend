@@ -30,7 +30,6 @@ class Cart(models.Model):
         return "%s: %s" % (str(self.date), self.user.username)
 
 class CartItem(models.Model):
-    date = models.DateField(default=date.today)
     cake = models.ForeignKey(
         Cake, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
