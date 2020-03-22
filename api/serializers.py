@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Cake, Cart, Cart_Item
+from .models import Cake, Cart, CartItem
 from datetime import date
 
 
@@ -38,7 +38,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ['username','first_name', 'last_name', 'email', 'past_items']
 
     def get_past_items(self, obj):
-        items = Cart.objects.filter(user=obj, date__lt=date.today())
+        items = Cart.objects.filter(user=obj, date__lte=date.today())
         return CartSerializer(items, many=True).data
 
 
@@ -53,8 +53,8 @@ class CartItemSerializer(serializers.ModelSerializer):
     item_price = serializers.SerializerMethodField()
 
     class Meta:
-        model = Cart_Item
-        fields = ['cake', 'quantity','item_price']
+        model = CartItem
+        fields = ['cake', 'quantity','item_price', 'date']
     
     def get_item_price(self, obj):
         return obj.cake.price*obj.quantity
@@ -66,17 +66,17 @@ class CartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ['user', 'date','cart_item']
+        fields = ['user', 'id', 'date', 'cart_item']
     
     def get_cart_item(self, obj):
-        cart_item = Cart_Item.objects.filter(cart=obj.id)
+        cart_item = CartItem.objects.filter(cart=obj.id)
         return CartItemSerializer(cart_item, many=True).data
 
       
 class CartItemCreateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Cart_Item
-        fields = ['cake', 'quantity']
+        model = CartItem
+        fields = ['cake', 'quantity', 'date']
 
 
 

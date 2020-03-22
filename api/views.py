@@ -1,6 +1,6 @@
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, CreateAPIView
 from .serializers import UserCreateSerializer, CakeSerializer, CartSerializer, CartItemCreateSerializer, ProfileSerializer,CartItemSerializer
-from .models import Cake, Cart_Item, Cart
+from .models import Cake, CartItem, Cart
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
