@@ -1,4 +1,4 @@
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, CreateAPIView,RetrieveUpdateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, CreateAPIView,RetrieveUpdateAPIView,DestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 
@@ -31,6 +31,12 @@ class CartDetail(RetrieveAPIView):
     def get_object(self):
         cart,created = Cart.objects.get_or_create(user=self.request.user, active=True)
         return cart
+
+class DeleteCartItem(DestroyAPIView):
+	queryset = CartItem.objects.all()
+	lookup_field = 'id'
+	lookup_url_kwarg = 'cartitem_id'
+	permission_classes = [IsAuthenticated, IsCartOwner]
 
 class UpdateCart(RetrieveUpdateAPIView):
     serializer_class = CartUpdateSerializer

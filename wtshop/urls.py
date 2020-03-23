@@ -8,7 +8,8 @@ urlpatterns = [
     path('cakes/', views.CakeList.as_view(), name="cake-list"),
     path('cart/', views.CartDetail.as_view(), name="cart"),
     path('cart/item/', views.CartItem.as_view(), name="cart_item"),
-    path('cart/<int:cartitem_id>/update/', views.UpdateCart.as_view(), name="update-cart"),
+    path('cart/<int:cartitem_id>/update/', views.UpdateCart.as_view(), name="update-cartitem"),
+    path('cart/<int:cartitem_id>/delete/', views.DeleteCartItem.as_view(), name="delete-cartitem"),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
 ]
