@@ -7,4 +7,5 @@ urlpatterns = [
     path('login/', TokenObtainPairView.as_view(), name='login'),
     path('register/', UserCreateAPIView.as_view(), name='register'),
     path('profile/', views.ProfileDetails.as_view(), name="profile-details")
+    path('checkout/', views.Checkout.as_view(), name="checkout") 
 ]

@@ -25,8 +25,11 @@ class Cart(models.Model):
     date = models.DateField(auto_now_add=True)
     active = models.BooleanField()
 
+
     def __str__(self):
         return self.user.username
+
+
 
 class Cart_Item(models.Model):
     cake = models.ForeignKey(
