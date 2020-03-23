@@ -26,6 +26,7 @@ class Cart(models.Model):
     date = models.DateField(default=date.today)
     active = models.BooleanField()
 
+
     def __str__(self):
         return "%s: %s" % (str(self.date), self.user.username)
 
