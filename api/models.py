@@ -37,7 +37,7 @@ class CartItem(models.Model):
         Cart, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s: %s, %s" % (str(self.date), self.cake.name, str(self.quantity))
+        return "%s: %s" % (self.cake.name, str(self.quantity))
 
 
 
