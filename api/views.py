@@ -8,6 +8,7 @@ from .permissions import IsCartOwner
 
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView
 
 
 class UserCreateAPIView(CreateAPIView):
@@ -60,9 +61,10 @@ class CartItem(CreateAPIView):
         return serializer.save(cart = cart)
 
 class Checkout(APIView):
+    serializer_class = CartSerializer
     def get(self, request):
         cart = Cart.objects.get(user=request.user, active=True)
         cart.active = False
         cart.save()
-        return Response({"whatever":"whatever you want to return"})
+        return Response(CartSerializer(cart).data)
 

@@ -10,6 +10,7 @@ urlpatterns = [
     path('cart/item/', views.CartItem.as_view(), name="cart_item"),
     path('cart/<int:cartitem_id>/update/', views.UpdateCart.as_view(), name="update-cartitem"),
     path('cart/<int:cartitem_id>/delete/', views.DeleteCartItem.as_view(), name="delete-cartitem"),
+    path('checkout/', views.Checkout.as_view(), name="checkout"),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
 ]
